@@ -9,6 +9,32 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
+    
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 80px);
+            gap: 5px;
+        }
+        .game-grid div {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            cursor: pointer;
+        }
+        .game-grid img {
+            width: 70px;
+            height: 70px;
+        }
     </style>
 </head>
 <body>
@@ -18,5 +44,23 @@
     <p id="score">Score is zero.</p>
     <p id="click-help">Click for help.</p>
     <p id="help">Help report</p>
+    <!-- Game Field -->
+    <div class="game-container">
+        <div class="game-grid">
+            <!-- Generate 5x7 grid with cactus images -->
+            <script>
+                const grid = document.querySelector('.game-grid');
+                for (let i = 0; i < 35; i++) {
+                    let cell = document.createElement('div');
+                    let img = document.createElement('img');
+                    img.src = "cactus.jpg"; // Cactus Image
+                    img.alt = "Cactus";
+                    cell.appendChild(img);
+                    grid.appendChild(cell);
+                }
+            </script>
+        </div>
+    </div>
+</div>
 </body>
 </html>
