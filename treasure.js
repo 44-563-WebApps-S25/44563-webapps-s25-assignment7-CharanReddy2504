@@ -1,4 +1,4 @@
-// Constants for images
+// Image paths
 const IMAGES = {
     cactus: "cactus.jpg",
     silver: "silver.jpg",
@@ -15,27 +15,31 @@ let lastLocation = 0;
 let gameOver = false;
 
 // Special item locations
-const silverLocations = [2, 5, 11, 21, 32];
-const goldLocation = 15;
-const snakeLocation = 20;
+const silverLocations = [2, 5, 11, 21, 32]; // Silver coins
+const goldLocation = 15; // Gold nugget
+const snakeLocation = 20; // Snake
 
 // Initialize Game Board
 function createBoard() {
     let board = document.getElementById("game-board");
 
     for (let i = 0; i < 35; i++) {
+        let cell = document.createElement("div");
         let img = document.createElement("img");
-        img.src = IMAGES.cactus;  // Default image
-        img.id = "img" + i;  // Unique ID
-        img.onclick = () => check(i);  // Assign click event
-        board.appendChild(img);
+        img.src = IMAGES.cactus; // Default cactus image
+        img.alt = "Cactus";
+        img.id = "img" + i;
+        img.onclick = () => check(i); // Assign click event
+
+        cell.appendChild(img);
+        board.appendChild(cell);
         ids.push(img.id);
     }
 }
 
 // Function to check clicked location
 function check(position) {
-    if (gameOver) return;  // Stop if game is over
+    if (gameOver) return; // Stop if game is over
 
     let imgElement = document.getElementById(ids[position]);
 
