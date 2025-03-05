@@ -1,10 +1,10 @@
 // Constants for images
 const IMAGES = {
-    cactus: "cactus.png",
-    silver: "silver.png",
-    gold: "gold.png",
-    snake: "snake.png",
-    pottery: "pottery.png"
+    cactus: "cactus.jpg",
+    silver: "silver.jpg",
+    gold: "gold.jpg",
+    snake: "snake.jpg",
+    pottery: "pottery.jpg"
 };
 
 // Game state variables
