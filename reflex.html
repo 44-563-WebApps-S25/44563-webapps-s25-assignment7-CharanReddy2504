@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Your Name - Reflexes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        div {
+            font-size: 20px;
+            margin: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Your Name - Reflexes</h1>
+
+<div id="target">Your time: </div>
+<div id="counter">Count: </div>
+
+<button id="goButton">Go</button>
+<button id="haltButton">Halt</button>
+
+<script>
+    let haltTime = undefined; // To store the time when "Halt" is pressed
+    let countdownTime = 5000; // 5 seconds countdown
+    let timer = null;
+
+    // Function to capture the halt time
+    function recordTime() {
+        haltTime = Date.now();
+        console.log("Halt pressed at:", haltTime);  // Log to console for debugging
+    }
+
+    document.getElementById('haltButton').onclick = recordTime;
+
+    // Start countdown when "Go" is pressed
+    document.getElementById('goButton').onclick = function() {
+        haltTime = undefined; // Reset for new game
+        let startTime = Date.now();
+        console.log("Go pressed at:", startTime);
+
+        // Countdown display
+        function updateCountdown() {
+            let now = Date.now();
+            let elapsed = now - startTime;
+            let remaining = Math.max(0, countdownTime - elapsed);
+            document.getElementById('counter').innerText = Count: ${remaining} ms;
+
+            if (remaining === 0) {
+                clearInterval(timer);
+                checkTiming();
+            }
+        }
+
+        timer = setInterval(updateCountdown, 10);
+    };
+
+    // Check timing after countdown ends
+    function checkTiming() {
+        if (haltTime === undefined) {
+            document.getElementById('target').innerText = "Your time: You missed it!";
+        } else {
+            let difference = Math.abs(haltTime - (Date.now() - (Date.now() % 1000))); // Compare halt time to current time
+            document.getElementById('target').innerText = Your time: ${difference} ms;
+        }
+    }
+</script>
+
+</body>
+</html>
