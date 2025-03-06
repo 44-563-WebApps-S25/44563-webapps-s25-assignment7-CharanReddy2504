@@ -138,35 +138,45 @@
 
                 // Help function - Logic to check neighboring cells
                 function help() {
+                    if (lastLocation === -1) {
+                        document.getElementById('help').innerText = "Explore first!";
+                        return;
+                    }
+
                     const row = Math.floor(lastLocation / 7);
                     const col = lastLocation % 7;
 
-                    // Neighbors (wrap for top/bottom)
+                    // Find 4 orthogonal neighbors (with wrap-around if needed)
                     const neighbors = [
-                        (lastLocation - 7 + 35) % 35,  // Above
-                        (lastLocation + 7) % 35,       // Below
-                        (col === 0) ? lastLocation + 6 : lastLocation - 1,  // Left
-                        (col === 6) ? lastLocation - 6 : lastLocation + 1   // Right
+                        (lastLocation - 7 + 35) % 35,  // Up
+                        (lastLocation + 7) % 35,       // Down
+                        (col === 0) ? lastLocation + 6 : lastLocation - 1, // Left
+                        (col === 6) ? lastLocation - 6 : lastLocation + 1  // Right
                     ];
 
-                    // Check for silver in neighbors
+                    // Check if any neighbor has silver
                     if (neighbors.some(n => silverLocations.includes(n))) {
-                        document.getElementById('help').innerText = 'clink';
+                        document.getElementById('help').innerText = "clink";
                         return;
                     }
 
-                    // Check proximity to snake
+                    // Check proximity to snake (directly adjacent - no wrap-around here)
                     const snakeRow = Math.floor(snakeLocation / 7);
                     const snakeCol = snakeLocation % 7;
 
-                    if (Math.abs(row - snakeRow) <= 1 && Math.abs(col - snakeCol) <= 1) {
-                        document.getElementById('help').innerText = 'rattle';
+                    const rowDiff = Math.abs(row - snakeRow);
+                    const colDiff = Math.abs(col - snakeCol);
+
+                    if (rowDiff <= 1 && colDiff <= 1) {
+                        document.getElementById('help').innerText = "rattle";
                         return;
                     }
 
-                    // Default case
-                    document.getElementById('help').innerText = 'wind';
+                    // Default fallback if none of the above apply
+                    document.getElementById('help').innerText = "wind";
                 }
+
+                document.getElementById('helpButton').onclick = help;
             </script>
         </div>
     </div>
