@@ -1,91 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Charan Reddy Chilipireddy builds list with divs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        .flex-container {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            border: 2px solid black;
-            padding: 10px;
-            min-height: 100px;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-        }
-        .divlist {
-            padding: 10px;
-            border: 1px solid black;
-            background-color: lightblue;
-        }
-        button, input {
-            margin: 5px;
-        }
-    </style>
+	<title>Charan Reddy Chilipireddy builds list with divs</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin: 20px;
+		}
+
+		.flex-container {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			border: 2px solid black;
+			padding: 10px;
+			min-height: 100px;
+			justify-content: center;
+			align-items: center;
+			gap: 5px;
+		}
+
+		.divlist {
+			padding: 10px;
+			border: 1px solid black;
+			background-color: lightblue;
+		}
+
+		button,
+		input {
+			margin: 5px;
+		}
+	</style>
 </head>
+
 <body>
 
-<h2>Charan Reddy Chilipireddy builds list with divs</h2>
+	<h2>Charan Reddy Chilipireddy builds list with divs</h2>
 
-<input type="text" id="inputText" placeholder="Enter item text">
+	<input type="text" id="inputText" placeholder="Enter item text">
 
-<button onclick="addEnd()">Add end</button>
-<button onclick="addFront()">Add front</button>
-<button onclick="remove()">Remove</button>
+	<button onclick="addEnd()">Add end</button>
+	<button onclick="addFront()">Add front</button>
+	<button onclick="promote()">Promote</button>
+	<button onclick="remove()">Remove</button>
 
-<div class="flex-container" id="container">
-    <div class="divlist">Item 1</div>
-    <div class="divlist">Item 2</div>
-</div>
+	<div class="flex-container" id="container">
+		<div class="divlist">Item 1</div>
+		<div class="divlist">Item 2</div>
+	</div>
 
-<script>
-    function addEnd() {
-        const input = document.getElementById("inputText").value;
-        if (input.trim() === "") {
-            alert("Please enter text to add!");
-            return;
-        }
+	<script>
+		function addEnd() {
+			const input = document.getElementById("inputText").value;
+			if (input.trim() === "") {
+				alert("Please enter text to add!");
+				return;
+			}
 
-        const newDiv = document.createElement("div");
-        newDiv.className = "divlist";
-        newDiv.innerHTML = input;
+			const newDiv = document.createElement("div");
+			newDiv.className = "divlist";
+			newDiv.innerHTML = input;
 
-        const container = document.getElementById("container");
-        container.appendChild(newDiv);
-    }
+			const container = document.getElementById("container");
+			container.appendChild(newDiv);
+		}
 
-    function addFront() {
-        const input = document.getElementById("inputText").value;
-        if (input.trim() === "") {
-            alert("Please enter text to add!");
-            return;
-        }
+		function addFront() {
+			const input = document.getElementById("inputText").value;
+			if (input.trim() === "") {
+				alert("Please enter text to add!");
+				return;
+			}
 
-        const newDiv = document.createElement("div");
-        newDiv.className = "divlist";
-        newDiv.innerHTML = input;
+			const newDiv = document.createElement("div");
+			newDiv.className = "divlist";
+			newDiv.innerHTML = input;
 
-        const container = document.getElementById("container");
-        container.insertBefore(newDiv, container.firstChild);
-    }
+			const container = document.getElementById("container");
+			container.insertBefore(newDiv, container.firstChild);
+		}
+		function promote() {
+			const divListItems = document.getElementsByClassName("divlist");
+			if (divListItems.length < 2) {
+				alert("Not enough items to promote!");
+				return;
+			}
 
-    function remove() {
-        const divListItems = document.getElementsByClassName("divlist");
-        if (divListItems.length === 0) {
-            alert("No items to remove!");
-            return;
-        }
+			const randomIndex = Math.floor(Math.random() * divListItems.length);
+			if (randomIndex === 0) {
+				alert("Top item can't move up!");
+				return;
+			}
 
-        const middleIndex = Math.floor(divListItems.length / 2);
-        divListItems[middleIndex].remove();
-    }
-</script>
+			const container = document.getElementById("container");
+			const itemToMove = divListItems[randomIndex];
+			const itemBefore = divListItems[randomIndex - 1];
+
+			container.insertBefore(itemToMove, itemBefore);
+		}
+
+
+
+		function remove() {
+			const divListItems = document.getElementsByClassName("divlist");
+			if (divListItems.length === 0) {
+				alert("No items to remove!");
+				return;
+			}
+
+			const middleIndex = Math.floor(divListItems.length / 2);
+			divListItems[middleIndex].remove();
+		}
+	</script>
 
 </body>
+
 </html>
