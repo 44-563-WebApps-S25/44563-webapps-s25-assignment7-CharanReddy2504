@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Charan Reddy Chilipireddy for Treasure</title>
+    <title>Charan Reddy Chilipireddy Digs for Treasure</title>
     <style>
         #locations,
         #score,
@@ -13,6 +13,7 @@
         p,
         div {
             margin: 10px 0;
+
         }
 
         body {
@@ -35,16 +36,39 @@
             gap: 5px;
         }
 
-        .game-grid img {
+        .game-grid div {
             width: 80px;
             height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
             cursor: pointer;
+        }
+
+        .game-grid img {
+            width: 70px;
+            height: 70px;
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(7, 50px);
+                gap: 5px;
+            }
+
+            .grid img {
+                width: 50px;
+                height: 50px;
+                cursor: pointer;
+            }
         }
     </style>
 </head>
 
 <body>
-    <h2>Charan Reddy Chilipireddy Digs for Treasure</h2>
+    <h1>Charan Reddy Chilipireddy</h1>
+    <h2>Treasure Hunt Game</h2>
 
     <div id="gameGrid"></div>
 
@@ -53,132 +77,100 @@
         <span>Locations Visited: <span id="locationsVisited">0</span></span>
     </div>
 
-    <button onclick="help()">Click for help</button>
+    <button id="helpButton">Click for help</button>
     <div id="help">Help result will appear here</div>
 
+    <!-- Game Field -->
     <div class="game-container">
         <div class="game-grid">
-            <!-- Grid populated dynamically with JS -->
+            <!-- Generate 5x7 grid with cactus images -->
+            <script>
+                // Set up the game grid
+                const grid = document.querySelector('.game-grid');
+                const ids = [];
+
+                for (let i = 0; i < 35; i++) {
+                    let img = document.createElement('img');
+                    img.src = "cactus.jpg"; // Initial image
+                    img.id = 'img' + i;
+                    img.onclick = () => check(i); // Click handler
+                    grid.appendChild(img);
+                    ids.push(img.id);
+                }
+
+                // Game Variables
+                let score = 0;
+                let locationsVisited = 0;
+                let lastLocation = 0;
+                let silverLocations = [2, 5, 11, 21, 32];  // Silver coin locations
+                let goldLocation = 15;                      // Gold location
+                let snakeLocation = 20;                      // Snake location
+                let gameOver = false;                        // Flag to stop after snake
+
+                // Check function - Handles what happens when clicking a location
+                function check(position) {
+                    if (gameOver) return;
+
+                    let img = document.getElementById(ids[position]);
+
+                    if (position === snakeLocation) {
+                        img.src = 'snake.jpg';
+                        gameOver = true;
+                        score -= 3;
+                    } else if (position === goldLocation) {
+                        img.src = 'gold nugget.jpg';
+                        score += 5;
+                    } else if (silverLocations.includes(position)) {
+                        img.src = 'silver coin.jpg';
+                        score += 3;
+                    } else {
+                        img.src = 'pottery.jpg';
+                        score += 1;
+                    }
+
+                    locationsVisited++;
+                    img.title = 'Visited';
+                    lastLocation = position;  // Remember the last clicked location
+
+                    document.getElementById('score').innerText = score;
+                    document.getElementById('locationsVisited').innerText = locationsVisited;
+                }
+
+                // Help function - Logic to check neighboring cells
+                function help() {
+                    const row = Math.floor(lastLocation / 7);
+                    const col = lastLocation % 7;
+
+                    // Neighbors (wrap for top/bottom)
+                    const neighbors = [
+                        (lastLocation - 7 + 35) % 35,  // Above
+                        (lastLocation + 7) % 35,       // Below
+                        (col === 0) ? lastLocation + 6 : lastLocation - 1,  // Left
+                        (col === 6) ? lastLocation - 6 : lastLocation + 1   // Right
+                    ];
+
+                    // Check for silver in neighbors
+                    if (neighbors.some(n => silverLocations.includes(n))) {
+                        document.getElementById('help').innerText = 'clink';
+                        return;
+                    }
+
+                    // Check proximity to snake
+                    const snakeRow = Math.floor(snakeLocation / 7);
+                    const snakeCol = snakeLocation % 7;
+
+                    if (Math.abs(row - snakeRow) <= 1 && Math.abs(col - snakeCol) <= 1) {
+                        document.getElementById('help').innerText = 'rattle';
+                        return;
+                    }
+
+                    // Default case
+                    document.getElementById('help').innerText = 'wind';
+                }
+            </script>
         </div>
     </div>
-
-    <script>
-        const grid = document.querySelector('.game-grid');
-        const ids = [];
-
-        // Initialize grid
-        for (let i = 0; i < 35; i++) {
-            let img = document.createElement('img');
-            img.src = "cactus.jpg";
-            img.id = 'img' + i;
-            img.onclick = () => check(i);
-            grid.appendChild(img);
-            ids.push(img.id);
-        }
-
-        // Random initialization
-        let snakeLocation = Math.floor(Math.random() * 35);
-        let silverLocations = new Set();
-
-        while (silverLocations.size < 5) {
-            let rand = Math.floor(Math.random() * 35);
-            if (rand !== snakeLocation) {
-                silverLocations.add(rand);
-            }
-        }
-
-        let goldLocation;
-        do {
-            goldLocation = Math.floor(Math.random() * 35);
-        } while (silverLocations.has(goldLocation) || goldLocation === snakeLocation);
-
-        silverLocations = [...silverLocations]; // Convert to array for checking
-
-        let score = 0;
-        let locationsVisited = 0;
-        let lastLocation = 0;
-        let gameOver = false;
-
-        // Check function for when player clicks a location
-        function check(position) {
-            if (gameOver) return;
-
-            let img = document.getElementById(ids[position]);
-
-            // Snake collision check (game ends)
-            if (position === snakeLocation) {
-                img.src = 'snake.jpg';
-                gameOver = true;
-                score -= 3;
-                document.getElementById('help').innerText = 'The snake got you! Game Over.';
-            } else if (position === goldLocation) {
-                img.src = 'gold nugget.jpg';
-                score += 5;
-            } else if (silverLocations.includes(position)) {
-                img.src = 'silver coin.jpg';
-                score += 3;
-            } else {
-                img.src = 'pottery.jpg';
-                score += 1;
-            }
-
-            // Update player stats
-            locationsVisited++;
-            img.title = 'Visited';
-            lastLocation = position;
-
-            document.getElementById('score').innerText = score;
-            document.getElementById('locationsVisited').innerText = locationsVisited;
-
-            // Move the snake diagonally (wrap around edges)
-            moveSnake();
-
-            // Check if snake caught the player immediately after move
-            if (snakeLocation === position) {
-                document.getElementById('help').innerText = 'The snake caught you! Game Over.';
-                gameOver = true;
-            }
-        }
-
-        // Snake diagonal movement with wrapping
-        function moveSnake() {
-            let row = Math.floor(snakeLocation / 7);
-            let col = snakeLocation % 7;
-
-            // Move down-right diagonally
-            row = (row + 1) % 5;
-            col = (col + 1) % 7;
-
-            snakeLocation = row * 7 + col;
-        }
-
-        // Help function to detect nearby items
-        function help() {
-            const row = Math.floor(lastLocation / 7);
-            const col = lastLocation % 7;
-
-            const neighbors = [
-                (lastLocation - 7 + 35) % 35,
-                (lastLocation + 7) % 35,
-                (col === 0) ? lastLocation + 6 : lastLocation - 1,
-                (col === 6) ? lastLocation - 6 : lastLocation + 1
-            ];
-
-            if (neighbors.some(n => silverLocations.includes(n))) {
-                document.getElementById('help').innerText = 'clink';
-                return;
-            }
-
-            const snakeRow = Math.floor(snakeLocation / 7);
-            const snakeCol = snakeLocation % 7;
-
-            if (Math.abs(row - snakeRow) <= 1 && Math.abs(col - snakeCol) <= 1) {
-                document.getElementById('help').innerText = 'rattle';
-                return;
-            }
-
-            document.getElementById('help').innerText = 'wind';
-        }
-    </script>
+    </div>
 </body>
+
 </html>
