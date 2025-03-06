@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Your Name - Reflexes</title>
+    <title>Charan Reddy Chilipireddy Reflexes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px;
+            background-color: #f0f8ff;
+            padding: 20px;
         }
         div {
+            margin: 15px 0;
             font-size: 20px;
-            margin: 15px;
+        }
+        button {
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<h1>Your Name - Reflexes</h1>
+<h2>Charan Reddy Chilipireddy Reflexes</h2>
 
-<div id="target">Your time: </div>
-<div id="counter">Count: </div>
+<div id="target">Your time: Not started</div>
+<div id="counter">Count: 5</div>
 
 <button id="goButton">Go</button>
 <button id="haltButton">Halt</button>
 
 <script>
-    let haltTime = undefined; // To store the time when "Halt" is pressed
-    let countdownTime = 5000; // 5 seconds countdown
-    let timer = null;
+    let haltTime = undefined; // 5a - initialize to undefined
 
-    // Function to capture the halt time
+    // Function to record time when Halt button is pressed
     function recordTime() {
-        haltTime = Date.now();
-        console.log("Halt pressed at:", haltTime);  // Log to console for debugging
+        haltTime = Date.now();  // current time in milliseconds
+        console.log("Halt button pressed at:", haltTime);
     }
 
-    document.getElementById('haltButton').onclick = recordTime;
+    // Connect recordTime() to the Halt button
+    document.getElementById("haltButton").onclick = recordTime;
 
-    // Start countdown when "Go" is pressed
-    document.getElementById('goButton').onclick = function() {
-        haltTime = undefined; // Reset for new game
-        let startTime = Date.now();
-        console.log("Go pressed at:", startTime);
+    // Function to begin the countdown when Go button is pressed
+    function beginTime() {
+        haltTime = undefined; // Reset haltTime for a new round
+        document.getElementById("target").innerText = "Your time: Not started";
+        document.getElementById("counter").innerText = "Count: 5";
 
-        // Countdown display
-        function updateCountdown() {
-            let now = Date.now();
-            let elapsed = now - startTime;
-            let remaining = Math.max(0, countdownTime - elapsed);
-            document.getElementById('counter').innerText = Count: ${remaining} ms;
+        // Countdown loop - 5, 4, 3, 2, 1, 0
+        for (let i = 0; i <= 5; i++) {
+            setTimeout(() => {
+                document.getElementById("counter").innerText = `Count: ${5 - i}`;
+            }, i * 1000);  // (5-i) * 1000 milliseconds for each second
+        }
 
-            if (remaining === 0) {
-                clearInterval(timer);
-                checkTiming();
+        // Final check at 5 seconds (after countdown completes)
+        setTimeout(() => {
+            if (haltTime === undefined) {
+                // Player didn't press halt in time
+                document.getElementById("target").innerText = "Not soon enough";
+            } else {
+                // Compare haltTime to the actual target time
+                const targetTime = Date.now();
+                const reactionTime = targetTime - haltTime;
+
+                document.getElementById("target").innerText = `Time was ${reactionTime} ms`;
             }
-        }
-
-        timer = setInterval(updateCountdown, 10);
-    };
-
-    // Check timing after countdown ends
-    function checkTiming() {
-        if (haltTime === undefined) {
-            document.getElementById('target').innerText = "Your time: You missed it!";
-        } else {
-            let difference = Math.abs(haltTime - (Date.now() - (Date.now() % 1000))); // Compare halt time to current time
-            document.getElementById('target').innerText = Your time: ${difference} ms;
-        }
+        }, 5000);  // 5 seconds total countdown
     }
+
+    // Connect beginTime() to the Go button
+    document.getElementById("goButton").onclick = beginTime;
 </script>
 
 </body>
